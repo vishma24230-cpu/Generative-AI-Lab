@@ -1,8 +1,29 @@
+'''
+In this document we understand the basics of the similarity scores rag architecture uses to get relevant data from a list of documents. The actual implementation of RAG will be done in a later python file.
+
+RAG is based on three things:
+
+# A Query vector -> The query vector for which we want to find similar documents in vector space.
+# A vector db -> a DB where the information e.g documents have been converted to vectors are stored.
+# A retriever -> The retriever matches the query vector to the vector db's documents and gets the most similar vectors.
+
+In this python file we have made a simple simulation of this by
+
+# Taking documents (list of strings) -> converting them to vector space -> returns a list of vector representations of all the documents
+# Take a query -> convert it to vector representation -> Find vector from list of vectors most similar to it -> return that vector and its similarity score.
+
+For similarity score, we use cosine_similarity here.
+
+Made a visual representation of the idea using streamlit.
+
+Run using:
+streamlit run rag_basics.py
+ '''
+
 from sklearn.metrics.pairwise import cosine_similarity
 import streamlit as st
 from langchain_google_genai import GoogleGenerativeAIEmbeddings, GoogleGenerativeAI
 from streamlit.runtime.state import session_state
-from get_data import get_relevant
 
 
 def get_relevant(query, documents):
