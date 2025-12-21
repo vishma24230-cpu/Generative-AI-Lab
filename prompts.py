@@ -2,6 +2,7 @@
 based on 'prompts' lecture by campusX (text-based only).
 '''
 
+from langchain_core.runnables import chain
 from langchain_huggingface import ChatHuggingFace, HuggingFaceEndpoint
 from langchain_core.prompts import PromptTemplate
 import streamlit as st
@@ -51,15 +52,15 @@ style = st.selectbox("Style", [
     "Commentary (Negatiev tone)", "Critical analysis (neutral tone)",
     "Crititcal analysis (negative tone)"
 ])
-prompt = template.invoke({
-    'paper_title': paper_title,
-    'length': length,
-    'style': style
-})
 llm = HuggingFaceEndpoint(repo_id='meta-llama/Meta-Llama-3-8B-Instruct',
-                          max_new_tokens=250)
+                          max_new_tokens=300)
 model = ChatHuggingFace(llm=llm)
 
 if st.button('Send', shortcut="Enter"):
-  result = model.invoke(prompt)
-  st.write(result.content)
+    chain = template | model
+    result = chain.invoke({
+        'paper_title': paper_title,
+        'length': length,
+        'style': style
+    })
+    st.write(result.content)
